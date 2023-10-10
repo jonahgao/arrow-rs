@@ -18,9 +18,37 @@
 //! Cast kernel for [Apache Arrow](https://docs.rs/arrow)
 
 pub mod cast;
+use arrow_array::{cast::AsArray, Array};
 pub use cast::*;
 pub mod display;
 pub mod parse;
 
 #[cfg(feature = "prettyprint")]
 pub mod pretty;
+
+#[test]
+fn test_can() {
+    use arrow_array::Decimal128Array;
+    use arrow_schema::DataType;
+
+    let input_type = DataType::Decimal128(10, 8);
+    let output_type = DataType::Decimal128(8, 6);
+    let array = Decimal128Array::from(vec![1000_000000])
+        .with_precision_and_scale(10, 6)
+        .unwrap();
+
+    let options = CastOptions {
+        safe: false,
+        ..Default::default()
+    };
+    let out_array = cast_with_options(&array, &output_type, &options).unwrap();
+    let out_array: &Decimal128Array = out_array.as_primitive();
+    // out_array
+    //     .validate_decimal_precision(out_array.precision())
+    //     .unwrap();
+
+    println!("{:?}", array);
+    println!("{:?}", array.value_as_string(0));
+    println!("{:?}", out_array);
+    println!("{:?}", out_array.value_as_string(0));
+}

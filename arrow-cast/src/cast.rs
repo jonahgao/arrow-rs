@@ -59,10 +59,12 @@ use num::{NumCast, ToPrimitive};
 /// CastOptions provides a way to override the default cast behaviors
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct CastOptions<'a> {
-    /// how to handle cast failures, either return NULL (safe=true) or return ERR (safe=false)
+    /// How to handle cast failures, either return NULL (safe=true) or return ERR (safe=false)
     pub safe: bool,
     /// Formatting options when casting from temporal types to string
     pub format_options: FormatOptions<'a>,
+    /// Whether to check for overflow when casting to decimals
+    pub check_precision_overflow: bool,
 }
 
 impl<'a> Default for CastOptions<'a> {
@@ -70,6 +72,7 @@ impl<'a> Default for CastOptions<'a> {
         Self {
             safe: true,
             format_options: FormatOptions::default(),
+            check_precision_overflow: true,
         }
     }
 }
@@ -832,18 +835,20 @@ pub fn cast_with_options(
 
         (_, List(ref to)) => cast_values_to_list::<i32>(array, to, cast_options),
         (_, LargeList(ref to)) => cast_values_to_list::<i64>(array, to, cast_options),
-        (Decimal128(_, s1), Decimal128(p2, s2)) => {
+        (Decimal128(p1, s1), Decimal128(p2, s2)) => {
             cast_decimal_to_decimal_same_type::<Decimal128Type>(
                 array.as_primitive(),
+                *p1,
                 *s1,
                 *p2,
                 *s2,
                 cast_options,
             )
         }
-        (Decimal256(_, s1), Decimal256(p2, s2)) => {
+        (Decimal256(p1, s1), Decimal256(p2, s2)) => {
             cast_decimal_to_decimal_same_type::<Decimal256Type>(
                 array.as_primitive(),
+                *p1,
                 *s1,
                 *p2,
                 *s2,
@@ -2275,7 +2280,9 @@ where
             false if r <= half_neg => d.sub_wrapping(I::Native::ONE),
             _ => d,
         };
+
         O::Native::from_decimal(adjusted)
+            .filter(|v| O::validate_decimal_precision(*v, output_precision).is_ok())
     };
 
     Ok(match cast_options.safe {
@@ -2302,7 +2309,11 @@ where
         .unwrap()
         .pow_checked((output_scale - input_scale) as u32)?;
 
-    let f = |x| O::Native::from_decimal(x).and_then(|x| x.mul_checked(mul).ok());
+    let f = |x| {
+        O::Native::from_decimal(x)
+            .and_then(|x| x.mul_checked(mul).ok())
+            .filter(|v| O::validate_decimal_precision(*v, output_precision).is_ok())
+    };
 
     Ok(match cast_options.safe {
         true => array.unary_opt(f),
@@ -2313,6 +2324,7 @@ where
 // Only support one type of decimal cast operations
 fn cast_decimal_to_decimal_same_type<T>(
     array: &PrimitiveArray<T>,
+    input_precision: u8,
     input_scale: i8,
     output_precision: u8,
     output_scale: i8,
@@ -2324,8 +2336,18 @@ where
 {
     let array: PrimitiveArray<T> = match input_scale.cmp(&output_scale) {
         Ordering::Equal => {
-            // the scale doesn't change, the native value don't need to be changed
-            array.clone()
+            if output_precision >= input_precision {
+                // the scale doesn't change, the native value don't need to be changed
+                array.clone()
+            } else {
+                // gets smaller, check if the value can fit into the new precision
+                if cast_options.safe {
+                    array.null_if_overflow_precision(output_precision)
+                } else {
+                    array.validate_decimal_precision(output_precision)?;
+                    array.clone()
+                }
+            }
         }
         Ordering::Greater => convert_to_smaller_scale_decimal::<T, T>(
             array,
