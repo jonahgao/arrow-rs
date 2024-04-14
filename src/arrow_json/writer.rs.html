@@ -1,6 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `arrow-json/src/writer.rs`."><title>writer.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9e1300b5663a8a03.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="arrow_json" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0-nightly (8b2459c1f 2024-04-09)" data-channel="nightly" data-search-js="search-ffac13a0df2b1870.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c97aec732c613ca4.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
-            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../arrow_json/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `arrow-json/src/writer.rs`."><title>writer.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-2c208a72533b4dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="arrow_json" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0-nightly (0bf471f33 2024-04-13)" data-channel="nightly" data-search-js="search-ffac13a0df2b1870.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c97aec732c613ca4.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../arrow_json/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -2140,6 +2138,84 @@
 <a href="#2138" id="2138">2138</a>
 <a href="#2139" id="2139">2139</a>
 <a href="#2140" id="2140">2140</a>
+<a href="#2141" id="2141">2141</a>
+<a href="#2142" id="2142">2142</a>
+<a href="#2143" id="2143">2143</a>
+<a href="#2144" id="2144">2144</a>
+<a href="#2145" id="2145">2145</a>
+<a href="#2146" id="2146">2146</a>
+<a href="#2147" id="2147">2147</a>
+<a href="#2148" id="2148">2148</a>
+<a href="#2149" id="2149">2149</a>
+<a href="#2150" id="2150">2150</a>
+<a href="#2151" id="2151">2151</a>
+<a href="#2152" id="2152">2152</a>
+<a href="#2153" id="2153">2153</a>
+<a href="#2154" id="2154">2154</a>
+<a href="#2155" id="2155">2155</a>
+<a href="#2156" id="2156">2156</a>
+<a href="#2157" id="2157">2157</a>
+<a href="#2158" id="2158">2158</a>
+<a href="#2159" id="2159">2159</a>
+<a href="#2160" id="2160">2160</a>
+<a href="#2161" id="2161">2161</a>
+<a href="#2162" id="2162">2162</a>
+<a href="#2163" id="2163">2163</a>
+<a href="#2164" id="2164">2164</a>
+<a href="#2165" id="2165">2165</a>
+<a href="#2166" id="2166">2166</a>
+<a href="#2167" id="2167">2167</a>
+<a href="#2168" id="2168">2168</a>
+<a href="#2169" id="2169">2169</a>
+<a href="#2170" id="2170">2170</a>
+<a href="#2171" id="2171">2171</a>
+<a href="#2172" id="2172">2172</a>
+<a href="#2173" id="2173">2173</a>
+<a href="#2174" id="2174">2174</a>
+<a href="#2175" id="2175">2175</a>
+<a href="#2176" id="2176">2176</a>
+<a href="#2177" id="2177">2177</a>
+<a href="#2178" id="2178">2178</a>
+<a href="#2179" id="2179">2179</a>
+<a href="#2180" id="2180">2180</a>
+<a href="#2181" id="2181">2181</a>
+<a href="#2182" id="2182">2182</a>
+<a href="#2183" id="2183">2183</a>
+<a href="#2184" id="2184">2184</a>
+<a href="#2185" id="2185">2185</a>
+<a href="#2186" id="2186">2186</a>
+<a href="#2187" id="2187">2187</a>
+<a href="#2188" id="2188">2188</a>
+<a href="#2189" id="2189">2189</a>
+<a href="#2190" id="2190">2190</a>
+<a href="#2191" id="2191">2191</a>
+<a href="#2192" id="2192">2192</a>
+<a href="#2193" id="2193">2193</a>
+<a href="#2194" id="2194">2194</a>
+<a href="#2195" id="2195">2195</a>
+<a href="#2196" id="2196">2196</a>
+<a href="#2197" id="2197">2197</a>
+<a href="#2198" id="2198">2198</a>
+<a href="#2199" id="2199">2199</a>
+<a href="#2200" id="2200">2200</a>
+<a href="#2201" id="2201">2201</a>
+<a href="#2202" id="2202">2202</a>
+<a href="#2203" id="2203">2203</a>
+<a href="#2204" id="2204">2204</a>
+<a href="#2205" id="2205">2205</a>
+<a href="#2206" id="2206">2206</a>
+<a href="#2207" id="2207">2207</a>
+<a href="#2208" id="2208">2208</a>
+<a href="#2209" id="2209">2209</a>
+<a href="#2210" id="2210">2210</a>
+<a href="#2211" id="2211">2211</a>
+<a href="#2212" id="2212">2212</a>
+<a href="#2213" id="2213">2213</a>
+<a href="#2214" id="2214">2214</a>
+<a href="#2215" id="2215">2215</a>
+<a href="#2216" id="2216">2216</a>
+<a href="#2217" id="2217">2217</a>
+<a href="#2218" id="2218">2218</a>
 </pre></div><pre class="rust"><code><span class="comment">// Licensed to the Apache Software Foundation (ASF) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -2975,7 +3051,9 @@
 
     <span class="kw">use </span>serde_json::json;
 
-    <span class="kw">use </span>arrow_array::builder::{Int32Builder, Int64Builder, MapBuilder, StringBuilder};
+    <span class="kw">use </span>arrow_array::builder::{
+        FixedSizeBinaryBuilder, Int32Builder, Int64Builder, MapBuilder, StringBuilder,
+    };
     <span class="kw">use </span>arrow_buffer::{Buffer, NullBuffer, OffsetBuffer, ToByteSlice};
     <span class="kw">use </span>arrow_data::ArrayData;
 
@@ -4278,6 +4356,82 @@
         <span class="macro">assert_eq!</span>(actual, expected);
 
         <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>test_writer_fixed_size_binary() {
+        <span class="comment">// set up schema:
+        </span><span class="kw">let </span>size = <span class="number">11</span>;
+        <span class="kw">let </span>schema = SchemaRef::new(Schema::new(<span class="macro">vec!</span>[Field::new(
+            <span class="string">"bytes"</span>,
+            DataType::FixedSizeBinary(size),
+            <span class="bool-val">true</span>,
+        )]));
+
+        <span class="comment">// build record batch:
+        </span><span class="kw">let </span><span class="kw-2">mut </span>builder = FixedSizeBinaryBuilder::new(size);
+        <span class="kw">let </span>values = [<span class="prelude-val">Some</span>(<span class="string">b"hello world"</span>), <span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="string">b"summer rain"</span>)];
+        <span class="kw">for </span>value <span class="kw">in </span>values {
+            <span class="kw">match </span>value {
+                <span class="prelude-val">Some</span>(v) =&gt; builder.append_value(v).unwrap(),
+                <span class="prelude-val">None </span>=&gt; builder.append_null(),
+            }
+        }
+        <span class="kw">let </span>array = Arc::new(builder.finish()) <span class="kw">as </span>ArrayRef;
+        <span class="kw">let </span>batch = RecordBatch::try_new(schema, <span class="macro">vec!</span>[array]).unwrap();
+
+        <span class="comment">// encode and check JSON with explicit nulls:
+        </span>{
+            <span class="kw">let </span><span class="kw-2">mut </span>buf = Vec::new();
+            <span class="kw">let </span>json_value: Value = {
+                <span class="kw">let </span><span class="kw-2">mut </span>writer = WriterBuilder::new()
+                    .with_explicit_nulls(<span class="bool-val">true</span>)
+                    .build::&lt;<span class="kw">_</span>, JsonArray&gt;(<span class="kw-2">&amp;mut </span>buf);
+                writer.write(<span class="kw-2">&amp;</span>batch).unwrap();
+                writer.close().unwrap();
+                serde_json::from_slice(<span class="kw-2">&amp;</span>buf).unwrap()
+            };
+
+            <span class="macro">assert_eq!</span>(
+                <span class="macro">json!</span>([
+                    {
+                        <span class="string">"bytes"</span>: <span class="string">"68656c6c6f20776f726c64"
+                    </span>},
+                    {
+                        <span class="string">"bytes"</span>: null <span class="comment">// the explicit null
+                    </span>},
+                    {
+                        <span class="string">"bytes"</span>: <span class="string">"73756d6d6572207261696e"
+                    </span>}
+                ]),
+                json_value,
+            );
+        }
+        <span class="comment">// encode and check JSON with no explicit nulls:
+        </span>{
+            <span class="kw">let </span><span class="kw-2">mut </span>buf = Vec::new();
+            <span class="kw">let </span>json_value: Value = {
+                <span class="comment">// explicit nulls are off by default, so we don't need
+                // to set that when creating the writer:
+                </span><span class="kw">let </span><span class="kw-2">mut </span>writer = ArrayWriter::new(<span class="kw-2">&amp;mut </span>buf);
+                writer.write(<span class="kw-2">&amp;</span>batch).unwrap();
+                writer.close().unwrap();
+                serde_json::from_slice(<span class="kw-2">&amp;</span>buf).unwrap()
+            };
+
+            <span class="macro">assert_eq!</span>(
+                <span class="macro">json!</span>([
+                    {
+                        <span class="string">"bytes"</span>: <span class="string">"68656c6c6f20776f726c64"
+                    </span>},
+                    {}, <span class="comment">// empty because nulls are omitted
+                    </span>{
+                        <span class="string">"bytes"</span>: <span class="string">"73756d6d6572207261696e"
+                    </span>}
+                ]),
+                json_value,
+            );
+        }
     }
 }
 </code></pre></div></section></main></body></html>
