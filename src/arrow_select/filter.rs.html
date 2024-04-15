@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `arrow-select/src/filter.rs`."><title>filter.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-2c208a72533b4dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="arrow_select" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0-nightly (0bf471f33 2024-04-13)" data-channel="nightly" data-search-js="search-ffac13a0df2b1870.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c97aec732c613ca4.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../arrow_select/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `arrow-select/src/filter.rs`."><title>filter.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-2c208a72533b4dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="arrow_select" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0-nightly (0d8b3346a 2024-04-14)" data-channel="nightly" data-search-js="search-ffac13a0df2b1870.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c97aec732c613ca4.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../arrow_select/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1645,6 +1645,100 @@
 <a href="#1645" id="1645">1645</a>
 <a href="#1646" id="1646">1646</a>
 <a href="#1647" id="1647">1647</a>
+<a href="#1648" id="1648">1648</a>
+<a href="#1649" id="1649">1649</a>
+<a href="#1650" id="1650">1650</a>
+<a href="#1651" id="1651">1651</a>
+<a href="#1652" id="1652">1652</a>
+<a href="#1653" id="1653">1653</a>
+<a href="#1654" id="1654">1654</a>
+<a href="#1655" id="1655">1655</a>
+<a href="#1656" id="1656">1656</a>
+<a href="#1657" id="1657">1657</a>
+<a href="#1658" id="1658">1658</a>
+<a href="#1659" id="1659">1659</a>
+<a href="#1660" id="1660">1660</a>
+<a href="#1661" id="1661">1661</a>
+<a href="#1662" id="1662">1662</a>
+<a href="#1663" id="1663">1663</a>
+<a href="#1664" id="1664">1664</a>
+<a href="#1665" id="1665">1665</a>
+<a href="#1666" id="1666">1666</a>
+<a href="#1667" id="1667">1667</a>
+<a href="#1668" id="1668">1668</a>
+<a href="#1669" id="1669">1669</a>
+<a href="#1670" id="1670">1670</a>
+<a href="#1671" id="1671">1671</a>
+<a href="#1672" id="1672">1672</a>
+<a href="#1673" id="1673">1673</a>
+<a href="#1674" id="1674">1674</a>
+<a href="#1675" id="1675">1675</a>
+<a href="#1676" id="1676">1676</a>
+<a href="#1677" id="1677">1677</a>
+<a href="#1678" id="1678">1678</a>
+<a href="#1679" id="1679">1679</a>
+<a href="#1680" id="1680">1680</a>
+<a href="#1681" id="1681">1681</a>
+<a href="#1682" id="1682">1682</a>
+<a href="#1683" id="1683">1683</a>
+<a href="#1684" id="1684">1684</a>
+<a href="#1685" id="1685">1685</a>
+<a href="#1686" id="1686">1686</a>
+<a href="#1687" id="1687">1687</a>
+<a href="#1688" id="1688">1688</a>
+<a href="#1689" id="1689">1689</a>
+<a href="#1690" id="1690">1690</a>
+<a href="#1691" id="1691">1691</a>
+<a href="#1692" id="1692">1692</a>
+<a href="#1693" id="1693">1693</a>
+<a href="#1694" id="1694">1694</a>
+<a href="#1695" id="1695">1695</a>
+<a href="#1696" id="1696">1696</a>
+<a href="#1697" id="1697">1697</a>
+<a href="#1698" id="1698">1698</a>
+<a href="#1699" id="1699">1699</a>
+<a href="#1700" id="1700">1700</a>
+<a href="#1701" id="1701">1701</a>
+<a href="#1702" id="1702">1702</a>
+<a href="#1703" id="1703">1703</a>
+<a href="#1704" id="1704">1704</a>
+<a href="#1705" id="1705">1705</a>
+<a href="#1706" id="1706">1706</a>
+<a href="#1707" id="1707">1707</a>
+<a href="#1708" id="1708">1708</a>
+<a href="#1709" id="1709">1709</a>
+<a href="#1710" id="1710">1710</a>
+<a href="#1711" id="1711">1711</a>
+<a href="#1712" id="1712">1712</a>
+<a href="#1713" id="1713">1713</a>
+<a href="#1714" id="1714">1714</a>
+<a href="#1715" id="1715">1715</a>
+<a href="#1716" id="1716">1716</a>
+<a href="#1717" id="1717">1717</a>
+<a href="#1718" id="1718">1718</a>
+<a href="#1719" id="1719">1719</a>
+<a href="#1720" id="1720">1720</a>
+<a href="#1721" id="1721">1721</a>
+<a href="#1722" id="1722">1722</a>
+<a href="#1723" id="1723">1723</a>
+<a href="#1724" id="1724">1724</a>
+<a href="#1725" id="1725">1725</a>
+<a href="#1726" id="1726">1726</a>
+<a href="#1727" id="1727">1727</a>
+<a href="#1728" id="1728">1728</a>
+<a href="#1729" id="1729">1729</a>
+<a href="#1730" id="1730">1730</a>
+<a href="#1731" id="1731">1731</a>
+<a href="#1732" id="1732">1732</a>
+<a href="#1733" id="1733">1733</a>
+<a href="#1734" id="1734">1734</a>
+<a href="#1735" id="1735">1735</a>
+<a href="#1736" id="1736">1736</a>
+<a href="#1737" id="1737">1737</a>
+<a href="#1738" id="1738">1738</a>
+<a href="#1739" id="1739">1739</a>
+<a href="#1740" id="1740">1740</a>
+<a href="#1741" id="1741">1741</a>
 </pre></div><pre class="rust"><code><span class="comment">// Licensed to the Apache Software Foundation (ASF) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -1670,10 +1764,10 @@
 <span class="kw">use </span>arrow_array::builder::BooleanBufferBuilder;
 <span class="kw">use </span>arrow_array::cast::AsArray;
 <span class="kw">use </span>arrow_array::types::{
-    ArrowDictionaryKeyType, ArrowPrimitiveType, ByteArrayType, RunEndIndexType,
+    ArrowDictionaryKeyType, ArrowPrimitiveType, ByteArrayType, ByteViewType, RunEndIndexType,
 };
 <span class="kw">use </span>arrow_array::<span class="kw-2">*</span>;
-<span class="kw">use </span>arrow_buffer::{bit_util, BooleanBuffer, NullBuffer, RunEndBuffer};
+<span class="kw">use </span>arrow_buffer::{bit_util, ArrowNativeType, BooleanBuffer, NullBuffer, RunEndBuffer};
 <span class="kw">use </span>arrow_buffer::{Buffer, MutableBuffer};
 <span class="kw">use </span>arrow_data::bit_iterator::{BitIndexIterator, BitSliceIterator};
 <span class="kw">use </span>arrow_data::transform::MutableArrayData;
@@ -1980,11 +2074,17 @@
             DataType::LargeUtf8 =&gt; {
                 <span class="prelude-val">Ok</span>(Arc::new(filter_bytes(values.as_string::&lt;i64&gt;(), predicate)))
             }
+            DataType::Utf8View =&gt; {
+                <span class="prelude-val">Ok</span>(Arc::new(filter_byte_view(values.as_string_view(), predicate)))
+            }
             DataType::Binary =&gt; {
                 <span class="prelude-val">Ok</span>(Arc::new(filter_bytes(values.as_binary::&lt;i32&gt;(), predicate)))
             }
             DataType::LargeBinary =&gt; {
                 <span class="prelude-val">Ok</span>(Arc::new(filter_bytes(values.as_binary::&lt;i64&gt;(), predicate)))
+            }
+            DataType::BinaryView =&gt; {
+                <span class="prelude-val">Ok</span>(Arc::new(filter_byte_view(values.as_binary_view(), predicate)))
             }
             DataType::RunEndEncoded(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; {
                 <span class="macro">downcast_run_array!</span>{
@@ -2155,12 +2255,8 @@
     BooleanArray::from(data)
 }
 
-<span class="doccomment">/// `filter` implementation for primitive arrays
-</span><span class="kw">fn </span>filter_primitive&lt;T&gt;(array: <span class="kw-2">&amp;</span>PrimitiveArray&lt;T&gt;, predicate: <span class="kw-2">&amp;</span>FilterPredicate) -&gt; PrimitiveArray&lt;T&gt;
-<span class="kw">where
-    </span>T: ArrowPrimitiveType,
-{
-    <span class="kw">let </span>values = array.values();
+<span class="attr">#[inline(never)]
+</span><span class="kw">fn </span>filter_native&lt;T: ArrowNativeType&gt;(values: <span class="kw-2">&amp;</span>[T], predicate: <span class="kw-2">&amp;</span>FilterPredicate) -&gt; Buffer {
     <span class="macro">assert!</span>(values.len() &gt;= predicate.filter.len());
 
     <span class="kw">let </span>buffer = <span class="kw">match </span><span class="kw-2">&amp;</span>predicate.strategy {
@@ -2193,9 +2289,19 @@
         IterationStrategy::All | IterationStrategy::None =&gt; <span class="macro">unreachable!</span>(),
     };
 
+    buffer.into()
+}
+
+<span class="doccomment">/// `filter` implementation for primitive arrays
+</span><span class="kw">fn </span>filter_primitive&lt;T&gt;(array: <span class="kw-2">&amp;</span>PrimitiveArray&lt;T&gt;, predicate: <span class="kw-2">&amp;</span>FilterPredicate) -&gt; PrimitiveArray&lt;T&gt;
+<span class="kw">where
+    </span>T: ArrowPrimitiveType,
+{
+    <span class="kw">let </span>values = array.values();
+    <span class="kw">let </span>buffer = filter_native(values, predicate);
     <span class="kw">let </span><span class="kw-2">mut </span>builder = ArrayDataBuilder::new(array.data_type().clone())
         .len(predicate.count)
-        .add_buffer(buffer.into());
+        .add_buffer(buffer);
 
     <span class="kw">if let </span><span class="prelude-val">Some</span>((null_count, nulls)) = filter_null_mask(array.nulls(), predicate) {
         builder = builder.null_count(null_count).null_bit_buffer(<span class="prelude-val">Some</span>(nulls));
@@ -2318,6 +2424,25 @@
 
     <span class="kw">let </span>data = <span class="kw">unsafe </span>{ builder.build_unchecked() };
     GenericByteArray::from(data)
+}
+
+<span class="doccomment">/// `filter` implementation for byte view arrays.
+</span><span class="kw">fn </span>filter_byte_view&lt;T: ByteViewType&gt;(
+    array: <span class="kw-2">&amp;</span>GenericByteViewArray&lt;T&gt;,
+    predicate: <span class="kw-2">&amp;</span>FilterPredicate,
+) -&gt; GenericByteViewArray&lt;T&gt; {
+    <span class="kw">let </span>new_view_buffer = filter_native(array.views(), predicate);
+
+    <span class="kw">let </span><span class="kw-2">mut </span>builder = ArrayDataBuilder::new(T::DATA_TYPE)
+        .len(predicate.count)
+        .add_buffer(new_view_buffer)
+        .add_buffers(array.data_buffers().to_vec());
+
+    <span class="kw">if let </span><span class="prelude-val">Some</span>((null_count, nulls)) = filter_null_mask(array.nulls(), predicate) {
+        builder = builder.null_count(null_count).null_bit_buffer(<span class="prelude-val">Some</span>(nulls));
+    }
+
+    GenericByteViewArray::from(<span class="kw">unsafe </span>{ builder.build_unchecked() })
 }
 
 <span class="doccomment">/// `filter` implementation for dictionaries
@@ -2533,6 +2658,69 @@
         <span class="macro">assert_eq!</span>(<span class="string">b"hello"</span>, d.value(<span class="number">0</span>));
         <span class="macro">assert!</span>(!d.is_null(<span class="number">0</span>));
         <span class="macro">assert!</span>(d.is_null(<span class="number">1</span>));
+    }
+
+    <span class="kw">fn </span>_test_filter_byte_view&lt;T&gt;()
+    <span class="kw">where
+        </span>T: ByteViewType,
+        str: AsRef&lt;T::Native&gt;,
+        T::Native: PartialEq,
+    {
+        <span class="kw">let </span>array = {
+            <span class="comment">// ["hello", "world", null, "large payload over 12 bytes", "lulu"]
+            </span><span class="kw">let </span><span class="kw-2">mut </span>builder = GenericByteViewBuilder::&lt;T&gt;::new();
+            builder.append_value(<span class="string">"hello"</span>);
+            builder.append_value(<span class="string">"world"</span>);
+            builder.append_null();
+            builder.append_value(<span class="string">"large payload over 12 bytes"</span>);
+            builder.append_value(<span class="string">"lulu"</span>);
+            builder.finish()
+        };
+
+        {
+            <span class="kw">let </span>predicate = BooleanArray::from(<span class="macro">vec!</span>[<span class="bool-val">true</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>, <span class="bool-val">true</span>, <span class="bool-val">false</span>]);
+            <span class="kw">let </span>actual = filter(<span class="kw-2">&amp;</span>array, <span class="kw-2">&amp;</span>predicate).unwrap();
+
+            <span class="macro">assert_eq!</span>(actual.len(), <span class="number">3</span>);
+
+            <span class="kw">let </span>expected = {
+                <span class="comment">// ["hello", null, "large payload over 12 bytes"]
+                </span><span class="kw">let </span><span class="kw-2">mut </span>builder = GenericByteViewBuilder::&lt;T&gt;::new();
+                builder.append_value(<span class="string">"hello"</span>);
+                builder.append_null();
+                builder.append_value(<span class="string">"large payload over 12 bytes"</span>);
+                builder.finish()
+            };
+
+            <span class="macro">assert_eq!</span>(actual.as_ref(), <span class="kw-2">&amp;</span>expected);
+        }
+
+        {
+            <span class="kw">let </span>predicate = BooleanArray::from(<span class="macro">vec!</span>[<span class="bool-val">true</span>, <span class="bool-val">false</span>, <span class="bool-val">false</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>]);
+            <span class="kw">let </span>actual = filter(<span class="kw-2">&amp;</span>array, <span class="kw-2">&amp;</span>predicate).unwrap();
+
+            <span class="macro">assert_eq!</span>(actual.len(), <span class="number">2</span>);
+
+            <span class="kw">let </span>expected = {
+                <span class="comment">// ["hello", "lulu"]
+                </span><span class="kw">let </span><span class="kw-2">mut </span>builder = GenericByteViewBuilder::&lt;T&gt;::new();
+                builder.append_value(<span class="string">"hello"</span>);
+                builder.append_value(<span class="string">"lulu"</span>);
+                builder.finish()
+            };
+
+            <span class="macro">assert_eq!</span>(actual.as_ref(), <span class="kw-2">&amp;</span>expected);
+        }
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>test_filter_string_view() {
+        _test_filter_byte_view::&lt;StringViewType&gt;()
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>test_filter_binary_view() {
+        _test_filter_byte_view::&lt;BinaryViewType&gt;()
     }
 
     <span class="attr">#[test]

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `arrow-cast/src/cast/mod.rs`."><title>mod.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-2c208a72533b4dd0.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="arrow_cast" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0-nightly (0bf471f33 2024-04-13)" data-channel="nightly" data-search-js="search-ffac13a0df2b1870.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-c97aec732c613ca4.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../arrow_cast/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `arrow-cast/src/cast/mod.rs`."><title>mod.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-2c208a72533b4dd0.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="arrow_cast" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0-nightly (0d8b3346a 2024-04-14)" data-channel="nightly" data-search-js="search-ffac13a0df2b1870.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-c97aec732c613ca4.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../arrow_cast/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -8613,6 +8613,70 @@
 <a href="#8613" id="8613">8613</a>
 <a href="#8614" id="8614">8614</a>
 <a href="#8615" id="8615">8615</a>
+<a href="#8616" id="8616">8616</a>
+<a href="#8617" id="8617">8617</a>
+<a href="#8618" id="8618">8618</a>
+<a href="#8619" id="8619">8619</a>
+<a href="#8620" id="8620">8620</a>
+<a href="#8621" id="8621">8621</a>
+<a href="#8622" id="8622">8622</a>
+<a href="#8623" id="8623">8623</a>
+<a href="#8624" id="8624">8624</a>
+<a href="#8625" id="8625">8625</a>
+<a href="#8626" id="8626">8626</a>
+<a href="#8627" id="8627">8627</a>
+<a href="#8628" id="8628">8628</a>
+<a href="#8629" id="8629">8629</a>
+<a href="#8630" id="8630">8630</a>
+<a href="#8631" id="8631">8631</a>
+<a href="#8632" id="8632">8632</a>
+<a href="#8633" id="8633">8633</a>
+<a href="#8634" id="8634">8634</a>
+<a href="#8635" id="8635">8635</a>
+<a href="#8636" id="8636">8636</a>
+<a href="#8637" id="8637">8637</a>
+<a href="#8638" id="8638">8638</a>
+<a href="#8639" id="8639">8639</a>
+<a href="#8640" id="8640">8640</a>
+<a href="#8641" id="8641">8641</a>
+<a href="#8642" id="8642">8642</a>
+<a href="#8643" id="8643">8643</a>
+<a href="#8644" id="8644">8644</a>
+<a href="#8645" id="8645">8645</a>
+<a href="#8646" id="8646">8646</a>
+<a href="#8647" id="8647">8647</a>
+<a href="#8648" id="8648">8648</a>
+<a href="#8649" id="8649">8649</a>
+<a href="#8650" id="8650">8650</a>
+<a href="#8651" id="8651">8651</a>
+<a href="#8652" id="8652">8652</a>
+<a href="#8653" id="8653">8653</a>
+<a href="#8654" id="8654">8654</a>
+<a href="#8655" id="8655">8655</a>
+<a href="#8656" id="8656">8656</a>
+<a href="#8657" id="8657">8657</a>
+<a href="#8658" id="8658">8658</a>
+<a href="#8659" id="8659">8659</a>
+<a href="#8660" id="8660">8660</a>
+<a href="#8661" id="8661">8661</a>
+<a href="#8662" id="8662">8662</a>
+<a href="#8663" id="8663">8663</a>
+<a href="#8664" id="8664">8664</a>
+<a href="#8665" id="8665">8665</a>
+<a href="#8666" id="8666">8666</a>
+<a href="#8667" id="8667">8667</a>
+<a href="#8668" id="8668">8668</a>
+<a href="#8669" id="8669">8669</a>
+<a href="#8670" id="8670">8670</a>
+<a href="#8671" id="8671">8671</a>
+<a href="#8672" id="8672">8672</a>
+<a href="#8673" id="8673">8673</a>
+<a href="#8674" id="8674">8674</a>
+<a href="#8675" id="8675">8675</a>
+<a href="#8676" id="8676">8676</a>
+<a href="#8677" id="8677">8677</a>
+<a href="#8678" id="8678">8678</a>
+<a href="#8679" id="8679">8679</a>
 </pre></div><pre class="rust"><code><span class="comment">// Licensed to the Apache Software Foundation (ASF) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -9132,6 +9196,34 @@
             v
         ))
     })
+}
+
+<span class="kw">fn </span>timestamp_to_date32&lt;T: ArrowTimestampType&gt;(
+    array: <span class="kw-2">&amp;</span>PrimitiveArray&lt;T&gt;,
+) -&gt; <span class="prelude-ty">Result</span>&lt;ArrayRef, ArrowError&gt; {
+    <span class="kw">let </span>err = |x: i64| {
+        ArrowError::CastError(<span class="macro">format!</span>(
+            <span class="string">"Cannot convert {} {x} to datetime"</span>,
+            std::any::type_name::&lt;T&gt;()
+        ))
+    };
+
+    <span class="kw">let </span>array: Date32Array = <span class="kw">match </span>array.timezone() {
+        <span class="prelude-val">Some</span>(tz) =&gt; {
+            <span class="kw">let </span>tz: Tz = tz.parse()<span class="question-mark">?</span>;
+            array.try_unary(|x| {
+                as_datetime_with_timezone::&lt;T&gt;(x, tz)
+                    .ok_or_else(|| err(x))
+                    .map(|d| Date32Type::from_naive_date(d.date_naive()))
+            })<span class="question-mark">?
+        </span>}
+        <span class="prelude-val">None </span>=&gt; array.try_unary(|x| {
+            as_datetime::&lt;T&gt;(x)
+                .ok_or_else(|| err(x))
+                .map(|d| Date32Type::from_naive_date(d.date()))
+        })<span class="question-mark">?</span>,
+    };
+    <span class="prelude-val">Ok</span>(Arc::new(array))
 }
 
 <span class="doccomment">/// Cast `array` to the provided data type and return a new Array with type `to_type`, if possible.
@@ -10205,24 +10297,17 @@
                 to_tz.clone(),
             ))
         }
-        (Timestamp(from_unit, <span class="kw">_</span>), Date32) =&gt; {
-            <span class="kw">let </span>array = cast_with_options(array, <span class="kw-2">&amp;</span>Int64, cast_options)<span class="question-mark">?</span>;
-            <span class="kw">let </span>time_array = array.as_primitive::&lt;Int64Type&gt;();
-            <span class="kw">let </span>from_size = time_unit_multiple(from_unit) * SECONDS_IN_DAY;
-
-            <span class="kw">let </span><span class="kw-2">mut </span>b = Date32Builder::with_capacity(array.len());
-
-            <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..array.len() {
-                <span class="kw">if </span>time_array.is_null(i) {
-                    b.append_null();
-                } <span class="kw">else </span>{
-                    b.append_value(
-                        num::integer::div_floor::&lt;i64&gt;(time_array.value(i), from_size) <span class="kw">as </span>i32,
-                    );
-                }
-            }
-
-            <span class="prelude-val">Ok</span>(Arc::new(b.finish()) <span class="kw">as </span>ArrayRef)
+        (Timestamp(TimeUnit::Microsecond, <span class="kw">_</span>), Date32) =&gt; {
+            timestamp_to_date32(array.as_primitive::&lt;TimestampMicrosecondType&gt;())
+        }
+        (Timestamp(TimeUnit::Millisecond, <span class="kw">_</span>), Date32) =&gt; {
+            timestamp_to_date32(array.as_primitive::&lt;TimestampMillisecondType&gt;())
+        }
+        (Timestamp(TimeUnit::Second, <span class="kw">_</span>), Date32) =&gt; {
+            timestamp_to_date32(array.as_primitive::&lt;TimestampSecondType&gt;())
+        }
+        (Timestamp(TimeUnit::Nanosecond, <span class="kw">_</span>), Date32) =&gt; {
+            timestamp_to_date32(array.as_primitive::&lt;TimestampNanosecondType&gt;())
         }
         (Timestamp(TimeUnit::Second, <span class="kw">_</span>), Date64) =&gt; <span class="prelude-val">Ok</span>(Arc::new(<span class="kw">match </span>cast_options.safe {
             <span class="bool-val">true </span>=&gt; {
@@ -10835,6 +10920,7 @@
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
     <span class="kw">use </span>arrow_buffer::{Buffer, NullBuffer};
+    <span class="kw">use </span>chrono::NaiveDate;
     <span class="kw">use </span>half::f16;
 
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -13049,14 +13135,33 @@
     </span><span class="kw">fn </span>test_cast_timestamp_to_date32() {
         <span class="kw">let </span>array =
             TimestampMillisecondArray::from(<span class="macro">vec!</span>[<span class="prelude-val">Some</span>(<span class="number">864000000005</span>), <span class="prelude-val">Some</span>(<span class="number">1545696000001</span>), <span class="prelude-val">None</span>])
-                .with_timezone(<span class="string">"UTC"</span>.to_string());
+                .with_timezone(<span class="string">"+00:00"</span>.to_string());
         <span class="kw">let </span>b = cast(<span class="kw-2">&amp;</span>array, <span class="kw-2">&amp;</span>DataType::Date32).unwrap();
         <span class="kw">let </span>c = b.as_primitive::&lt;Date32Type&gt;();
         <span class="macro">assert_eq!</span>(<span class="number">10000</span>, c.value(<span class="number">0</span>));
         <span class="macro">assert_eq!</span>(<span class="number">17890</span>, c.value(<span class="number">1</span>));
         <span class="macro">assert!</span>(c.is_null(<span class="number">2</span>));
     }
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>test_cast_timestamp_to_date32_zone() {
+        <span class="kw">let </span>strings = StringArray::from_iter([
+            <span class="prelude-val">Some</span>(<span class="string">"1970-01-01T00:00:01"</span>),
+            <span class="prelude-val">Some</span>(<span class="string">"1970-01-01T23:59:59"</span>),
+            <span class="prelude-val">None</span>,
+            <span class="prelude-val">Some</span>(<span class="string">"2020-03-01T02:00:23+00:00"</span>),
+        ]);
+        <span class="kw">let </span>dt = DataType::Timestamp(TimeUnit::Millisecond, <span class="prelude-val">Some</span>(<span class="string">"-07:00"</span>.into()));
+        <span class="kw">let </span>timestamps = cast(<span class="kw-2">&amp;</span>strings, <span class="kw-2">&amp;</span>dt).unwrap();
+        <span class="kw">let </span>dates = cast(timestamps.as_ref(), <span class="kw-2">&amp;</span>DataType::Date32).unwrap();
 
+        <span class="kw">let </span>c = dates.as_primitive::&lt;Date32Type&gt;();
+        <span class="kw">let </span>expected = NaiveDate::from_ymd_opt(<span class="number">1970</span>, <span class="number">1</span>, <span class="number">1</span>).unwrap();
+        <span class="macro">assert_eq!</span>(c.value_as_date(<span class="number">0</span>).unwrap(), expected);
+        <span class="macro">assert_eq!</span>(c.value_as_date(<span class="number">1</span>).unwrap(), expected);
+        <span class="macro">assert!</span>(c.is_null(<span class="number">2</span>));
+        <span class="kw">let </span>expected = NaiveDate::from_ymd_opt(<span class="number">2020</span>, <span class="number">2</span>, <span class="number">29</span>).unwrap();
+        <span class="macro">assert_eq!</span>(c.value_as_date(<span class="number">3</span>).unwrap(), expected);
+    }
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_cast_timestamp_to_date64() {
         <span class="kw">let </span>array =
@@ -15380,6 +15485,27 @@
             <span class="number">3</span>,
         )) <span class="kw">as </span>ArrayRef;
         <span class="macro">assert_eq!</span>(expected.as_ref(), res.as_ref());
+
+        <span class="comment">// The safe option is false and the source array contains a null list.
+        // issue: https://github.com/apache/arrow-rs/issues/5642
+        </span><span class="kw">let </span>array = Arc::new(ListArray::from_iter_primitive::&lt;Int32Type, <span class="kw">_</span>, <span class="kw">_</span>&gt;(<span class="macro">vec!</span>[
+            <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">2</span>), <span class="prelude-val">Some</span>(<span class="number">3</span>)]),
+            <span class="prelude-val">None</span>,
+        ])) <span class="kw">as </span>ArrayRef;
+        <span class="kw">let </span>res = cast_with_options(
+            array.as_ref(),
+            <span class="kw-2">&amp;</span>DataType::FixedSizeList(Arc::new(Field::new(<span class="string">"item"</span>, DataType::Int32, <span class="bool-val">true</span>)), <span class="number">3</span>),
+            <span class="kw-2">&amp;</span>CastOptions {
+                safe: <span class="bool-val">false</span>,
+                ..Default::default()
+            },
+        )
+        .unwrap();
+        <span class="kw">let </span>expected = Arc::new(FixedSizeListArray::from_iter_primitive::&lt;Int32Type, <span class="kw">_</span>, <span class="kw">_</span>&gt;(
+            <span class="macro">vec!</span>[<span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">2</span>), <span class="prelude-val">Some</span>(<span class="number">3</span>)]), <span class="prelude-val">None</span>],
+            <span class="number">3</span>,
+        )) <span class="kw">as </span>ArrayRef;
+        <span class="macro">assert_eq!</span>(expected.as_ref(), res.as_ref());
     }
 
     <span class="attr">#[test]
@@ -16996,7 +17122,7 @@
             .map(|ts| ts / <span class="number">1_000_000</span>)
             .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
-        <span class="kw">let </span>array = TimestampMillisecondArray::from(ts_array).with_timezone(<span class="string">"UTC"</span>.to_string());
+        <span class="kw">let </span>array = TimestampMillisecondArray::from(ts_array).with_timezone(<span class="string">"+00:00"</span>.to_string());
         <span class="kw">let </span>casted_array = cast(<span class="kw-2">&amp;</span>array, <span class="kw-2">&amp;</span>DataType::Date32).unwrap();
         <span class="kw">let </span>date_array = casted_array.as_primitive::&lt;Date32Type&gt;();
         <span class="kw">let </span>casted_array = cast(<span class="kw-2">&amp;</span>date_array, <span class="kw-2">&amp;</span>DataType::Utf8).unwrap();
@@ -17088,7 +17214,9 @@
 
         <span class="kw">for </span>dt <span class="kw">in </span>data_types {
             <span class="macro">assert_eq!</span>(
-                cast_with_options(<span class="kw-2">&amp;</span>array, <span class="kw-2">&amp;</span>dt, <span class="kw-2">&amp;</span>cast_options).unwrap_err().to_string(),
+                cast_with_options(<span class="kw-2">&amp;</span>array, <span class="kw-2">&amp;</span>dt, <span class="kw-2">&amp;</span>cast_options)
+                    .unwrap_err()
+                    .to_string(),
                 <span class="string">"Parser error: Invalid timezone \"ZZTOP\": only offset based timezones supported without chrono-tz feature"
             </span>);
         }

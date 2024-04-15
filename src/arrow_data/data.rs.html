@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `arrow-data/src/data.rs`."><title>data.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-2c208a72533b4dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="arrow_data" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0-nightly (0bf471f33 2024-04-13)" data-channel="nightly" data-search-js="search-ffac13a0df2b1870.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c97aec732c613ca4.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../arrow_data/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `arrow-data/src/data.rs`."><title>data.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-2c208a72533b4dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="arrow_data" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0-nightly (0d8b3346a 2024-04-14)" data-channel="nightly" data-search-js="search-ffac13a0df2b1870.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c97aec732c613ca4.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../arrow_data/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -2130,6 +2130,20 @@
 <a href="#2130" id="2130">2130</a>
 <a href="#2131" id="2131">2131</a>
 <a href="#2132" id="2132">2132</a>
+<a href="#2133" id="2133">2133</a>
+<a href="#2134" id="2134">2134</a>
+<a href="#2135" id="2135">2135</a>
+<a href="#2136" id="2136">2136</a>
+<a href="#2137" id="2137">2137</a>
+<a href="#2138" id="2138">2138</a>
+<a href="#2139" id="2139">2139</a>
+<a href="#2140" id="2140">2140</a>
+<a href="#2141" id="2141">2141</a>
+<a href="#2142" id="2142">2142</a>
+<a href="#2143" id="2143">2143</a>
+<a href="#2144" id="2144">2144</a>
+<a href="#2145" id="2145">2145</a>
+<a href="#2146" id="2146">2146</a>
 </pre></div><pre class="rust"><code><span class="comment">// Licensed to the Apache Software Foundation (ASF) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -3676,14 +3690,14 @@
         DataType::Utf8 =&gt; DataTypeLayout::new_binary::&lt;i32&gt;(),
         DataType::LargeUtf8 =&gt; DataTypeLayout::new_binary::&lt;i64&gt;(),
         DataType::BinaryView | DataType::Utf8View =&gt; DataTypeLayout::new_view(),
-        DataType::FixedSizeList(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; DataTypeLayout::new_empty(), <span class="comment">// all in child data
+        DataType::FixedSizeList(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; DataTypeLayout::new_nullable_empty(), <span class="comment">// all in child data
         </span>DataType::List(<span class="kw">_</span>) =&gt; DataTypeLayout::new_fixed_width::&lt;i32&gt;(),
         DataType::ListView(<span class="kw">_</span>) | DataType::LargeListView(<span class="kw">_</span>) =&gt; {
             <span class="macro">unimplemented!</span>(<span class="string">"ListView/LargeListView not implemented"</span>)
         }
         DataType::LargeList(<span class="kw">_</span>) =&gt; DataTypeLayout::new_fixed_width::&lt;i64&gt;(),
         DataType::Map(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; DataTypeLayout::new_fixed_width::&lt;i32&gt;(),
-        DataType::Struct(<span class="kw">_</span>) =&gt; DataTypeLayout::new_empty(), <span class="comment">// all in child data,
+        DataType::Struct(<span class="kw">_</span>) =&gt; DataTypeLayout::new_nullable_empty(), <span class="comment">// all in child data,
         </span>DataType::RunEndEncoded(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; DataTypeLayout::new_empty(), <span class="comment">// all in child data,
         </span>DataType::Union(<span class="kw">_</span>, mode) =&gt; {
             <span class="kw">let </span>type_ids = BufferSpec::FixedWidth {
@@ -3744,12 +3758,21 @@
     }
 
     <span class="doccomment">/// Describes arrays which have no data of their own
-    /// (e.g. FixedSizeList). Note such arrays may still have a Null
-    /// Bitmap
-    </span><span class="kw">pub fn </span>new_empty() -&gt; <span class="self">Self </span>{
+    /// but may still have a Null Bitmap (e.g. FixedSizeList)
+    </span><span class="kw">pub fn </span>new_nullable_empty() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             buffers: <span class="macro">vec!</span>[],
             can_contain_null_mask: <span class="bool-val">true</span>,
+            variadic: <span class="bool-val">false</span>,
+        }
+    }
+
+    <span class="doccomment">/// Describes arrays which have no data of their own
+    /// (e.g. RunEndEncoded).
+    </span><span class="kw">pub fn </span>new_empty() -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            buffers: <span class="macro">vec!</span>[],
+            can_contain_null_mask: <span class="bool-val">false</span>,
             variadic: <span class="bool-val">false</span>,
         }
     }
@@ -3890,6 +3913,11 @@
 
     <span class="kw">pub fn </span>add_buffer(<span class="kw-2">mut </span><span class="self">self</span>, b: Buffer) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.buffers.push(b);
+        <span class="self">self
+    </span>}
+
+    <span class="kw">pub fn </span>add_buffers(<span class="kw-2">mut </span><span class="self">self</span>, bs: Vec&lt;Buffer&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.buffers.extend(bs);
         <span class="self">self
     </span>}
 
